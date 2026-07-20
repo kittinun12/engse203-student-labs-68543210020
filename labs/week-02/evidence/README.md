@@ -1,3 +1,12 @@
 # Week 02 Evidence
 
-ควรมี screenshots ของ initial/loading/success/error/filter/mobile และผล `npm run check` / `npm run build`
+## Web Application Screenshots
+labs/week-02/evidence/initial.png
+
+labs/week-02/evidence/filter.png
+
+## Terminal Command Results
+### Check / Verify Result
+labs/week-02/evidence/npm run build.png
+
+labs/week-02/evidence/npm verify.png
