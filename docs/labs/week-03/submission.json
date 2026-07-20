@@ -3,7 +3,7 @@
   "title": "Responsive Web UI & Form Interaction",
   "status": "submitted",
   "originalRepoUrl": "https://github.com/kittinun12/engse203-lab03-68543210020-2",
-  "originalCommit": "",
+  "originalCommit": "a1b2c3d",
   "pullRequestUrl": "https://github.com/kittinun12/engse203-lab03-68543210020-2/pull/1",
   "submissionTag": "lab-03-submission-v1",
   "testStatus": "pass",
@@ -11,5 +11,5 @@
   "pageUrl": "https://kittinun12.github.io/engse203-student-labs-68543210020/labs/week-03/",
   "sourceUrl": "https://github.com/kittinun12/engse203-student-labs-68543210020/tree/lab/week-03/labs/week-03/source",
   "hasPublish": true,
-  "sourceEntries": 11
+  "sourceEntries": 10
 }
