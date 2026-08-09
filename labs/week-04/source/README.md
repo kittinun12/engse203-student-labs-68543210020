@@ -64,24 +64,24 @@ FilterBar เรียก onFilterChange(status) และ RequestCard เรี
 
 | Test ID | Actual Result | Pass/Fail | Evidence/Screenshot |
 |---|---|---|---|
-| TC-01 Initial | โหลดข้อมูลเริ่มต้นและแสดง Summary ถูกต้อง | pass | Screenshot 2026-08-09 214654.png |
-| TC-02 Controlled input | กรอกข้อมูลในแบบฟอร์มได้และค่าเปลี่ยนแปลงตามพิมพ์ | pass | Screenshot 2026-08-09 214637.png |
-| TC-03 Invalid | แสดงข้อความแจ้งเตือน Error เมื่อส่งฟอร์มว่าง | pass | Screenshot 2026-08-09 215155.png |
-| TC-04 Valid add | เพิ่มคำร้องใหม่เข้าสู่ List และ Summary อัปเดตทันที | pass | Screenshot 2026-08-09 215437.png |
-| TC-05 Filter | กรองรายการตามสถานะที่เลือกได้อย่างถูกต้อง | pass | Screenshot 2026-08-09 215545.png |
-| TC-06 All | กดเลือกปุ่ม "ทั้งหมด" แล้วแสดงคำร้องครบทุกรายการ | pass | Screenshot 2026-08-09 215653.png |
-| TC-07 Empty | แสดงสถานะว่างเมื่อไม่มีคำร้องใด ๆ | pass | Screenshot 2026-08-09 215745.png |
-| TC-08 Delete | ลบคำร้องออกจาก List และ Summary อัปเดตทันที | pass | Screenshot 2026-08-09 215745.png |
-| TC-09 Mobile | แสดงหน้าตาให้เหมาะสมกับหน้าจอขนาดเล็ก | pass | Screenshot 2026-08-09 220029.png |
-| TC-10 Keyboard | รองรับการนำทางด้วยคีย์บอร์ดได้อย่างถูกต้อง | pass | Screenshot 2026-08-09 220242.png |
-| TC-11 Build | การ build project เสร็จสมบูรณ์โดยไม่มีข้อผิดพลาด | pass | Screenshot 2026-08-09 220347.png |
-| TC-12 Pages | เว็บไซต์สามารถเข้าถึงได้ผ่าน URL เหมาะสม | pass | Screenshot 2026-08-09 220514.png |
+| TC-01 Initial | โหลดข้อมูลเริ่มต้นและแสดง Summary ถูกต้อง | pass | Screenshot-2026-08-09-214654.png |
+| TC-02 Controlled input | กรอกข้อมูลในแบบฟอร์มได้และค่าเปลี่ยนแปลงตามพิมพ์ | pass | Screenshot-2026-08-09-214637.png |
+| TC-03 Invalid | แสดงข้อความแจ้งเตือน Error เมื่อส่งฟอร์มว่าง | pass | Screenshot-2026-08-09-215155.png |
+| TC-04 Valid add | เพิ่มคำร้องใหม่เข้าสู่ List และ Summary อัปเดตทันที | pass | Screenshot-2026-08-09-215437.png |
+| TC-05 Filter | กรองรายการตามสถานะที่เลือกได้อย่างถูกต้อง | pass | Screenshot-2026-08-09-215545.png |
+| TC-06 All | กดเลือกปุ่ม "ทั้งหมด" แล้วแสดงคำร้องครบทุกรายการ | pass | Screenshot-2026-08-09-215653.png |
+| TC-07 Empty | แสดงสถานะว่างเมื่อไม่มีคำร้องใด ๆ | pass | Screenshot-2026-08-09-215745.png |
+| TC-08 Delete | ลบคำร้องออกจาก List และ Summary อัปเดตทันที | pass | Screenshot-2026-08-09-215745.png |
+| TC-09 Mobile | แสดงหน้าตาให้เหมาะสมกับหน้าจอขนาดเล็ก | pass | Screenshot-2026-08-09-220029.png |
+| TC-10 Keyboard | รองรับการนำทางด้วยคีย์บอร์ดได้อย่างถูกต้อง | pass | Screenshot-2026-08-09-220242.png |
+| TC-11 Build | การ build project เสร็จสมบูรณ์โดยไม่มีข้อผิดพลาด | pass | Screenshot-2026-08-09-220347.png |
+| TC-12 Pages | เว็บไซต์สามารถเข้าถึงได้ผ่าน URL เหมาะสม | pass | Screenshot-2026-08-09-220514.png |
 
 ## Screenshots
 
 - Desktop: `evidence/desktop.png`
 - Mobile 375px: `evidence/mobile-375.png`
-- Validation/empty state: Screenshot 2026-08-09 215155.png , Screenshot 2026-08-09 215745.png
+- Validation/empty state: Screenshot-2026-08-09-215155.png , Screenshot-2026-08-09-215745.png
 
 ## Week 03 → Week 04 Reflection
 
