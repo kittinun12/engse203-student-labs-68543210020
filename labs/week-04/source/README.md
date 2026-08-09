@@ -9,7 +9,7 @@
 ## URLs
 
 - Repository: engse203-student-labs-68543210020
-- Pull Request: TODO
+- Pull Request: https://github.com/kittinun12/engse203-student-labs-68543210020/pull/8
 - GitHub Pages: https://kittinun12.github.io/engse203-student-labs-68543210020/
 
 ## Component Tree
