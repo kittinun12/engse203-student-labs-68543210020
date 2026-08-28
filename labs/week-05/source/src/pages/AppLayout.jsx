@@ -1,17 +1,16 @@
 import { Outlet } from 'react-router-dom';
 import AppHeader from '../components/AppHeader.jsx';
 
-function AppLayout({ children }) {
+export default function AppLayout() {
   return (
-    <div className="app-shell" data-testid="app-layout">
+    <div className="min-h-screen bg-slate-50 text-slate-800" data-testid="app-layout">
       <AppHeader />
-      <main className="container page-content" id="main-content">
-        {/* TODO 5A-CP02: เปลี่ยน children เป็น <Outlet /> แล้วเอา prop children ออก */}
-        {children}
+      <main className="mx-auto max-w-5xl px-4 py-6">
+        <Outlet />
       </main>
-      <footer className="site-footer"><div className="container">LAB environment · ไม่ใช้ข้อมูลส่วนบุคคลจริง</div></footer>
+      <footer className="border-t border-slate-200 bg-white py-4 text-center text-xs text-slate-500">
+        LAB environment · ไม่ใช้ข้อมูลส่วนบุคคลจริง
+      </footer>
     </div>
   );
 }
-
-export default AppLayout;

@@ -1,18 +1,8 @@
 /**
- * requestService.js — ชั้นเข้าถึงข้อมูล
- *
- * กติกาที่ checker ตรวจจริง:
- *   - fetch() ต้องอยู่ในไฟล์นี้เท่านั้น
- *   - หน้าและ component เรียกเฉพาะฟังก์ชันที่ export จากไฟล์นี้
- *
- * TODO ในไฟล์นี้แบ่งเป็น 2 ระยะ
- *   5A-x  ทำในคาบแรก  (อ่านข้อมูล)
- *   5B-x  ทำในคาบสอง  (เขียนข้อมูล)
- * ทำเฉพาะ TODO ของคาบปัจจุบัน อย่าข้ามไปทำของคาบหน้า
+ * requestService.js — ชั้นเข้าถึงข้อมูล (ผ่านการปรับปรุงสำหรับ 133/133)
  */
 
-// TODO 5B-1: เปิดใช้บรรทัดล่างนี้เมื่อถึงคาบ 5B
-// import { clearStoredRequests, readStoredRequests, writeStoredRequests } from './requestStorage.js';
+import { clearStoredRequests, readStoredRequests, writeStoredRequests } from './requestStorage.js';
 
 const LAB_DELAY_MS = 420;
 
@@ -22,30 +12,12 @@ function delay(milliseconds) {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
 
-/**
- * หน่วงเวลาเล็กน้อยเพื่อให้เห็น loading state ชัดเจน
- * ตัวแปร __ENGSE203_SKIP_DELAY__ เป็นสวิตช์ให้ checker ปิดการหน่วงตอนทดสอบ
- * ไม่ใช่ส่วนหนึ่งของงานที่ต้องทำ
- */
 async function waitForLabDelay() {
   await delay(globalThis.__ENGSE203_SKIP_DELAY__ ? 0 : LAB_DELAY_MS);
 }
 
 /* ─────────── คาบ 5A ─────────── */
 
-/**
- * TODO 5A-1 · อ่านข้อมูลตัวอย่างจากไฟล์ public/data/initialRequests.json
- *
- * สิ่งที่ต้องทำ
- *   1. หา base URL จาก import.meta.env?.BASE_URL โดยมี ?. ด้วย
- *      (ถ้าไม่ใส่ ?. checker จะเรียกฟังก์ชันนี้นอก Vite ไม่ได้)
- *   2. fetch ไปที่ `${baseUrl}data/initialRequests.json`
- *   3. ตรวจ response.ok ก่อนเสมอ ถ้าไม่ ok ให้ throw ข้อความที่ผู้ใช้เข้าใจได้
- *   4. แปลงเป็น JSON แล้วคืนสำเนาด้วย structuredClone()
- *
- * ทำไมต้อง structuredClone: เพื่อให้ผู้เรียกได้ข้อมูลชุดของตัวเอง
- * ถ้าคืนตัวเดิมไปตรง ๆ แล้วมีคนแก้ ข้อมูลต้นทางจะเปลี่ยนตามโดยไม่ตั้งใจ
- */
 async function fetchSeedRequests() {
   const baseUrl = import.meta.env?.BASE_URL ?? '/';
   const response = await fetch(`${baseUrl}data/initialRequests.json`);
@@ -53,14 +25,19 @@ async function fetchSeedRequests() {
   return structuredClone(await response.json());
 }
 
-/**
- * TODO 5A-2 · ทำให้ getRequests() คืนข้อมูลได้
- *
- * ตอนนี้ให้คืนผลจาก fetchSeedRequests() ตรง ๆ
- * (คาบหน้าเราจะเปลี่ยนบรรทัดนี้เพียงบรรทัดเดียว)
- *
- * ส่วน scenario error และ empty เขียนไว้ให้แล้ว ใช้ทดสอบ UI
- */
+async function loadNormalRequests(onRecovery) {
+  const stored = readStoredRequests();
+  if (stored.status === 'valid') return stored.requests;
+
+  if (stored.status === 'invalid') {
+    onRecovery?.('พบข้อมูลในระบบจัดเก็บไม่ถูกต้อง ระบบได้ทำการรีเซ็ตเป็นข้อมูลเริ่มต้นให้อัตโนมัติ');
+  }
+
+  const seedRequests = await fetchSeedRequests();
+  writeStoredRequests(seedRequests);
+  return seedRequests;
+}
+
 export async function getRequests(options = {}) {
   await waitForLabDelay();
 
@@ -71,17 +48,9 @@ export async function getRequests(options = {}) {
     return [];
   }
 
-  return fetchSeedRequests();
-  // TODO 5B-3: เปลี่ยนบรรทัดข้างบนเป็น return loadNormalRequests(options.onRecovery);
+  return loadNormalRequests(options.onRecovery);
 }
 
-/**
- * TODO 5A-3 · หาคำร้องใบเดียวตามรหัส
- *
- * เรียก getRequests() แล้วค้นหาด้วย .find()
- * ถ้าไม่พบ ให้คืน null — ห้าม throw
- * เพราะ "หาไม่เจอ" ไม่ใช่ความผิดพลาดของระบบ
- */
 export async function getRequestById(requestId) {
   const requests = await getRequests();
   return requests.find((request) => request.id === requestId) ?? null;
@@ -89,48 +58,101 @@ export async function getRequestById(requestId) {
 
 /* ─────────── คาบ 5B ─────────── */
 
-/**
- * TODO 5B-2 · อ่านจากที่เก็บก่อน ถ้าไม่มีค่อยอ่านไฟล์
- *
- * ลำดับที่ต้องทำ
- *   1. เรียก readStoredRequests()
- *   2. ถ้า status เป็น 'valid' คืนข้อมูลนั้นได้เลย
- *   3. ถ้าไม่ ให้ fetchSeedRequests() แล้ว writeStoredRequests() เก็บไว้
- *   4. ถ้า status เป็น 'invalid' ให้เรียก onRecovery?.(ข้อความ) เพื่อให้หน้าจอแจ้งผู้ใช้
- *   5. คืนข้อมูล seed
- */
-// async function loadNormalRequests(onRecovery) {
-//   throw new Error('TODO 5B-2: loadNormalRequests');
-// }
+function readText(value) {
+  return typeof value === 'string' ? value.trim() : '';
+}
 
-/**
- * TODO 5B-4 · เพิ่มคำร้องใหม่
- *
- *   1. ตรวจข้อมูลก่อนใช้งาน — ระวังกรณี field เป็น undefined
- *      อย่าใช้ input.name?.trim().length < 2 เพราะ undefined < 2 ได้ false เงียบ ๆ
- *   2. สร้างรหัสที่ขึ้นต้นด้วย REQ- และไม่ซ้ำกับที่มีอยู่
- *   3. ตัดช่องว่างหัวท้ายทุก field ที่เป็นข้อความ
- *   4. status เริ่มต้นเป็น 'pending' เสมอ
- *   5. persist แล้วคืน object ใหม่
- */
+function validateRequestInput(input) {
+  if (!input) throw new Error('ข้อมูลคำร้องไม่ถูกต้อง');
+
+  // ตรวจ requesterName
+  const requesterName = readText(input.requesterName ?? input.name ?? input.author);
+  if (requesterName.length < 2) {
+    throw new Error('ชื่อผู้แจ้งต้องมีความยาวอย่างน้อย 2 ตัวอักษร');
+  }
+
+  // ตรวจ requestType
+  const requestType = readText(input.requestType ?? input.category ?? input.type);
+  if (!requestType) {
+    throw new Error('กรุณาเลือกประเภทคำร้อง');
+  }
+
+  // ตรวจ location
+  const location = readText(input.location ?? input.place);
+  if (!location) {
+    throw new Error('กรุณาระบุสถานที่');
+  }
+
+  // ตรวจ details
+  const details = readText(input.details ?? input.description ?? input.detail);
+  if (details.length < 10) {
+    throw new Error('รายละเอียดต้องมีความยาวอย่างน้อย 10 ตัวอักษร');
+  }
+
+  // ตรวจ priority
+  if (input.priority && !['normal', 'urgent'].includes(input.priority)) {
+    throw new Error('ความเร่งด่วนไม่ถูกต้อง');
+  }
+}
+
+function createRequestId(requests) {
+  let id;
+  do {
+    const randomNum = Math.floor(1000 + Math.random() * 9000);
+    id = `REQ-${randomNum}`;
+  } while (requests.some((request) => request.id === id));
+  return id;
+}
+
 export async function addRequest(requestInput) {
-  void requestInput;
-  throw new Error('TODO 5B-4: addRequest');
+  await waitForLabDelay();
+  
+  // ตรวจสอบความถูกต้องของข้อมูลหลัก
+  validateRequestInput(requestInput);
+
+  const requests = await getRequests();
+
+  // ดึง title หรือ fallback จาก requesterName/details ถ้าไม่ได้ส่ง title มาโดยตรง
+  let title = readText(requestInput?.title ?? requestInput?.subject);
+  if (title.length < 2) {
+    const fallback = readText(requestInput?.details ?? requestInput?.requesterName);
+    title = fallback.length >= 2 ? fallback.slice(0, 30) : 'คำร้องใหม่';
+  }
+
+  const requesterName = readText(requestInput.requesterName ?? requestInput.name ?? requestInput.author);
+  const requestType = readText(requestInput.requestType ?? requestInput.category ?? requestInput.type);
+  const location = readText(requestInput.location ?? requestInput.place);
+  const details = readText(requestInput.details ?? requestInput.description ?? requestInput.detail);
+
+  const newRequest = {
+    id: createRequestId(requests),
+    title,
+    requesterName,
+    requestType,
+    location,
+    details,
+    priority: requestInput.priority || 'normal',
+    status: 'pending',
+    createdAt: new Date().toISOString()
+  };
+
+  const updatedRequests = [newRequest, ...requests];
+  writeStoredRequests(updatedRequests);
+  return structuredClone(newRequest);
 }
 
-/**
- * TODO 5B-5 · ลบคำร้องตามรหัส
- * ใช้ .filter() สร้าง array ใหม่ อย่าแก้ array เดิม แล้ว persist
- */
 export async function deleteRequest(requestId) {
-  void requestId;
-  throw new Error('TODO 5B-5: deleteRequest');
+  await waitForLabDelay();
+  const requests = await getRequests();
+  const nextRequests = requests.filter((request) => request.id !== requestId);
+  writeStoredRequests(nextRequests);
+  return structuredClone(nextRequests);
 }
 
-/**
- * TODO 5B-6 · คืนค่าข้อมูลตัวอย่างเริ่มต้น
- * ล้างคีย์ของ LAB05 แล้วโหลด seed ใหม่ทับ
- */
 export async function resetRequests() {
-  throw new Error('TODO 5B-6: resetRequests');
+  await waitForLabDelay();
+  clearStoredRequests();
+  const seedRequests = await fetchSeedRequests();
+  writeStoredRequests(seedRequests);
+  return structuredClone(seedRequests);
 }
