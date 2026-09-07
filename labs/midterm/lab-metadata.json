@@ -1,11 +1,7 @@
 {
-  "week": "midterm",
+  "week": "week-06",
   "title": "midterm",
   "status": "submitted",
-  "originalRepoUrl": "https://github.com/kittinun12/engse203-student-labs-68543210020",
-  "originalCommit": "3b84c099",
-  "pullRequestUrl": "https://github.com/kittinun12/engse203-student-labs-68543210020/pull/11",
   "submissionTag": "midterm-submission-v1",
-  "version": "midterm-submission-v1",
   "testStatus": "pass"
 }
