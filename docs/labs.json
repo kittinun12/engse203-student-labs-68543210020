@@ -69,6 +69,16 @@
     "pageUrl": "https://kittinun12.github.io/engse203-student-labs-68543210020/labs/week-05/",
     "sourceUrl": "https://github.com/kittinun12/engse203-student-labs-68543210020/tree/lab/week-05/labs/week-05/source",
     "hasPublish": false,
-    "sourceEntries": 10
+    "sourceEntries": 8
+  },
+  {
+    "lab": "week-06",
+    "title": "RESTful API ด้วย Express - CRUD, middleware, error handling",
+    "status": "submitted",
+    "submissionTag": "lab-06-submission-v1",
+    "pageUrl": "https://kittinun12.github.io/engse203-student-labs-68543210020/labs/week-06/",
+    "sourceUrl": "https://github.com/kittinun12/engse203-student-labs-68543210020/tree/lab/week-06/labs/week-06/source",
+    "hasPublish": false,
+    "sourceEntries": 0
   }
 ]
