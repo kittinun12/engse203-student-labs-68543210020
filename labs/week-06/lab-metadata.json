@@ -3,6 +3,6 @@
   "title": "RESTful API ด้วย Express - CRUD, middleware, error handling",
   "status": "submitted",
   "submissionTag": "lab-06-submission-v1",
-  "sourceDir": "starter",
+  "branch": "unit3/week-06",
   "sourcePath": "labs/week-06/starter"
 }
