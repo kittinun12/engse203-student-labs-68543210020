@@ -2,5 +2,6 @@
   "lab": "week-06",
   "title": "RESTful API ด้วย Express - CRUD, middleware, error handling",
   "status": "submitted",
-  "submissionTag": "lab-06-submission-v1"
+  "submissionTag": "lab-06-submission-v1",
+  "branch": "unit3/week-06"
 }
