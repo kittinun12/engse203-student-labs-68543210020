@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Service Request</title>
+  <!-- ดึงไฟล์ CSS ของคุณมาใช้งาน -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ส่วนหัวข้อด้านบน (Hero Banner) -->
+  <header class="hero">
+    <div class="container hero__content">
+      <p class="eyebrow">Responsive Web UI, Event and Form</p>
+      <h1>Campus Service Request</h1>
+      <p class="hero__lead">ระบบส่งคำร้องขอของมหาวิทยาลัย เพิ่มประสิทธิภาพและการตอบกลับที่รวดเร็ว</p>
+    </div>
+  </header>
+
+  <!-- ส่วนเนื้อหาหลักที่แบ่งเป็น Grid ซ้าย-ขวา -->
+  <main class="container page-grid">
+    
+    <!-- ฝั่งซ้าย: ฟอร์มกรอกข้อมูล (Panel) -->
+    <section class="panel">
+      <div class="section-heading">
+        <h2>Create Service Request</h2>
+        <p>กรุณากรอกข้อมูลคำร้องของคุณให้ครบถ้วน</p>
+      </div>
+
+      <form id="profile-form">
+        <!-- Field 1: ชื่อที่ต้องการแสดง -->
+        <div class="field">
+          <label for="display-name">ชื่อที่ต้องการแสดง</label>
+          <input
+            id="display-name"
+            name="displayName"
+            type="text"
+            placeholder="เช่น สมชาย ใจดี"
+            aria-describedby="displayName-hint displayName-error"
+            required />
+          <div class="field-meta">
+            <small id="displayName-hint" class="hint">อย่างน้อย 2 ตัวอักษร</small>
+            <small id="displayName-error" class="error"></small>
+          </div>
+        </div>
+
+        <!-- Field 2: ประเภทคำขอ (ปรับจากบทบาทการเรียนรู้เป็นประเภทคำขอให้เข้ากับโปรเจกต์) -->
+        <div class="field">
+          <label for="learning-role">ประเภทคำขอ</label>
+          <select id="learning-role" name="learningRole" aria-describedby="learningRole-error" required>
+            <option value="">-- กรุณาเลือก --</option>
+            <option value="General">คำขอทั่วไป</option>
+            <option value="Academic">คำขอด้านวิชาการ</option>
+            <option value="Facility">คำขอด้านสถานที่ / อุปกรณ์</option>
+          </select>
+          <small id="learningRole-error" class="error"></small>
+        </div>
+
+        <!-- Field 3: รายละเอียดคำขอ -->
+        <div class="field">
+          <label for="learning-goal">รายละเอียด</label>
+          <textarea
+            id="learning-goal"
+            name="learningGoal"
+            placeholder="กรุณากรอกรายละเอียดของคำขอ..."
+            aria-describedby="learningGoal-hint learningGoal-error"
+            required></textarea>
+          <div class="field-meta">
+            <small id="learningGoal-hint" class="hint">กรุณากรอกรายละเอียดอย่างน้อย 10 ตัวอักษร</small>
+            <small id="goal-count" class="counter" aria-live="polite">0 ตัวอักษร</small>
+          </div>
+          <small id="learningGoal-error" class="error"></small>
+        </div>
+
+        <!-- ปุ่มกดต่างๆ -->
+        <div class="actions">
+          <button type="submit">Submit Request</button>
+          <button type="reset" class="button-secondary">Clear</button>
+        </div>
+
+        <!-- สถานะฟอร์มหลังกด Submit -->
+        <div id="form-status" class="status" data-state="idle">เริ่มพิมพ์เพื่อทดลอง Event และ Live Preview</div>
+      </form>
+    </section>
+
+    <!-- ฝั่งขวา: กล่อง Live Preview (จะติดอยู่กับที่เวลาเลื่อนหน้าจอ) -->
+    <aside class="panel preview-panel">
+      <div class="section-heading">
+        <h2>Live Preview</h2>
+        <p>ข้อมูลตัวอย่างที่จะถูกส่งระบบ</p>
+      </div>
+
+      <!-- การ์ดพรีวิวไล่เฉดสีสวยงามตาม CSS ของคุณ -->
+      <div class="profile-card">
+        <div>
+          <p class="profile-card__label">NAME</p>
+          <h2 id="preview-name">ยังไม่ระบุชื่อ</h2>
+        </div>
+        <div>
+          <p class="profile-card__label">TYPE</p>
+          <p id="preview-role" class="role">ยังไม่เลือกประเภท</p>
+        </div>
+        <div>
+          <p class="profile-card__label">DETAILS</p>
+          <p id="preview-goal" class="goal">ยังไม่มีรายละเอียด</p>
+        </div>
+      </div>
+
+      <!-- กล่อง Submitted Requests ด้านล่างการ์ด -->
+      <div class="concept-box">
+        <p class="step-label">Submitted Requests</p>
+        <div id="submitted-list">ยังไม่มีคำร้องขอ</div>
+      </div>
+    </aside>
+
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Campus Service Request System. All rights reserved.</p>
+  </footer>
+
+  <!-- ดึงไฟล์ JavaScript ของคุณมาใช้งาน -->
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+**/node_modules/
+**/dist/
+**/.env
+**/.env.*
+.DS_Store
+Thumbs.db
+.vscode/
+*.log
+
+# ข้อมูลบันทึกคำร้อง (CP08 Requirement)
+data/requests.json
+
+# docs/ เป็นผล build สำหรับ GitHub Pages และต้อง commit
+!docs/
+!docs/**
