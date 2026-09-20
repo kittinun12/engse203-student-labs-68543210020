@@ -46,8 +46,23 @@ export function create(input) {
 }
 
 export function updateStatus(id, status) {
+  // 1. ตรวจสอบค่า status ที่ส่งมา ต้องเป็น 1 ใน 3 ค่านิยามเท่านั้น
+  const validStatuses = ['pending', 'in-progress', 'completed'];
+  if (!validStatuses.includes(status)) {
+    const error = new Error('Invalid status value');
+    error.statusCode = 400; // คืน status 400[cite: 13]
+    throw error;
+  }
+
+  // 2. ค้นหาคำร้องตาม id[cite: 13]
   const found = requests.find((r) => r.id === id);
-  if (!found) return null;
+  if (!found) {
+    const error = new Error('Request not found');
+    error.statusCode = 404; // คืน status 404[cite: 13]
+    throw error;
+  }
+
+  // 3. ปรับเปลี่ยนสถานะ และคืนค่าคำร้องที่อัปเดตแล้ว (status 200)[cite: 13]
   found.status = status;
   return structuredClone(found);
 }
