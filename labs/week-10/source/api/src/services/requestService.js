@@ -1,19 +1,17 @@
-import { readFile } from 'node:fs/promises';
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-
-import { config } from '../config.js';
 import { DatabaseSync } from 'node:sqlite';
-
-import { readFileSync } from 'node:fs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const API_ROOT = path.resolve(HERE, '../..');
-const DB_FILE = process.env.DB_FILE ?? path.join(API_ROOT, 'data', 'campus.db');
-//const SCHEMA_FILE = path.join(API_ROOT, 'data', 'schema.sql');
 
-const db = new DatabaseSync(DB_FILE);
+const DB_FILE = process.env.DB_FILE ?? path.join(API_ROOT, 'data', 'campus.db');
+const SCHEMA_FILE = path.join(API_ROOT, 'data', 'schema.sql');
+
+let db = new DatabaseSync(DB_FILE);
 db.exec('PRAGMA foreign_keys = ON');
+
 /**
  * Week 10 — เปลี่ยน service จากอ่านไฟล์ JSON เป็นฐานข้อมูล SQLite
  *
@@ -41,19 +39,23 @@ export async function loadSeed() {
    *   ใช้ fileURLToPath(import.meta.url) — ไม่งั้น dev กับ checker หาไฟล์คนละที่
    */
 
+  db = new DatabaseSync(DB_FILE);
+  db.exec('PRAGMA foreign_keys = ON');
+
   const ready = db.prepare(
     "SELECT COUNT(*) c FROM sqlite_master WHERE type='table' AND name='requests'"
   ).get().c;
 
   if (!ready) db.exec(readFileSync(SCHEMA_FILE, 'utf8'));
-
-  /*
+  
+/*
   try {
     requests = JSON.parse(await readFile(DATA, 'utf8'));
   } catch {
     requests = [];
   }
-  */
+*/
+
 }
 
 const SELECT_SHAPE = `
@@ -75,27 +77,23 @@ export function findAll({ status } = {}) {
    *   - ถ้ามี status ให้เติม WHERE r.status = ?
    *   คำใบ้: คัดลอก query จาก queries.sql ที่ทำสัปดาห์ที่แล้วมาปรับ
    */
-
-  //return db.prepare(SELECT_SHAPE).all();   // ยังไม่มี JOIN ก็ได้
   
   return status
     ? db.prepare(`${SELECT_SHAPE} WHERE r.status = ? ORDER BY r.id`).all(status)
     : db.prepare(`${SELECT_SHAPE} ORDER BY r.id`).all();
-  
 }
 
 export function findById(id) {
   /** TODO W10-4 (CP28) · SELECT ... WHERE r.id = ?  · ไม่พบให้คืน null */
-  //return db.prepare('SELECT * FROM requests WHERE id = ?').get(id) ?? null;
   return db.prepare(`${SELECT_SHAPE} WHERE r.id = ?`).get(id) ?? null;
 }
 
 function resolveUserId(name) {
   const found = db.prepare('SELECT id FROM users WHERE name = ?').get(name);
-  if (found) return found.id;                  // มีแล้ว — ใช้ id เดิม
+  if (found) return found.id;          // มีแล้ว — ใช้ id เดิม ไม่สร้างซ้ำ
 
   const slug = Date.now().toString(36);
-  return db.prepare('INSERT INTO users (name, department, email) VALUES (?, ?, ?)')
+  return db.prepare('INSERT INTO users (name, department, email) VALUES (?,?,?)')
            .run(name, 'ไม่ระบุ', `user-${slug}@rmutl.ac.th`).lastInsertRowid;
 }
 
@@ -108,26 +106,35 @@ function nextId() {
 }
 
 export function create(input) {
-  /**
-   * TODO W10-5 (CP29) · INSERT ลงฐานข้อมูล
-   *   ⚠ frontend ส่ง requesterName (ชื่อ) มา แต่ตารางเก็บ requester_id (ตัวเลข)
-   *   → ต้องหา id ของชื่อนั้นก่อน ถ้ายังไม่มีในระบบให้สร้าง user ใหม่
-   *   นี่คือ "หน้าที่ของ service" ที่พูดถึงในบทที่ 9 ของสัปดาห์ที่แล้ว
-   */
-  const id = nextId();
-  db.prepare(
-    `INSERT INTO requests (id, requester_id, request_type, location, details, priority)
-     VALUES (?, ?, ?, ?, ?, ?)`
-  ).run(
-    id,
-    resolveUserId(input.requesterName.trim()),   // ← แปลงตรงนี้
-    input.requestType,
-    input.location.trim(),
-    input.details.trim(),
-    input.priority ?? 'normal'
-  );
-  return findById(id);   // คืนรูปแบบที่ frontend ต้องการ
+
+  const id = nextId(); 
+  db.exec('BEGIN'); 
+  
+  try {
+    const requesterId = resolveUserId(input.requesterName.trim());
+    
+    db.prepare(`
+      INSERT INTO requests (id, requester_id, request_type, location, details, priority)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `).run(
+      id,
+      requesterId,
+      input.requestType,
+      input.location,
+      input.details,
+      input.priority
+    );
+
+    db.exec('COMMIT'); 
+    return findById(id); 
+    
+  } catch (err) {
+    db.exec('ROLLBACK');
+    throw err;
+  }
+  return findById(id);
 }
+
 
 export function updateStatus(id, status) {
   const result = db.prepare('UPDATE requests SET status = ? WHERE id = ?')
@@ -137,7 +144,7 @@ export function updateStatus(id, status) {
 
 export function remove(id) {
   const target = findById(id);      // ① หาก่อน
-  if (!target) return null;         // ② ไม่พบ → null
+  if (!target) return null;          // ② ไม่พบ → null
   db.prepare('DELETE FROM requests WHERE id = ?').run(id);
-  return target;                    // ③ คืนของที่ลบ
+  return target;                     // ③ คืนของที่ลบ
 }
