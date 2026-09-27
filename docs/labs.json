@@ -111,12 +111,20 @@
     "pageUrl": "https://kittinun12.github.io/engse203-student-labs-68543210020/labs/week-09/",
     "sourceUrl": "https://github.com/kittinun12/engse203-student-labs-68543210020/tree/lab/week-09/labs/week-09/source",
     "hasPublish": false,
-    "sourceEntries": 0
+    "sourceEntries": 6
   },
   {
+    "lab": "week-10",
+    "title": "Node.js DataBase Integration",
+    "status": "submitted",
+    "testStatus": "pass",
+    "submissionTag": "lab-10-submission-v1",
+    "branch": "lab/week-10",
+    "sourcePath": "labs/week-10/source",
+    "pullRequestUrl": "https://github.com/kittinun12/engse203-student-labs-68543210020/pull/18",
     "pageUrl": "https://kittinun12.github.io/engse203-student-labs-68543210020/labs/week-10/",
     "sourceUrl": "https://github.com/kittinun12/engse203-student-labs-68543210020/tree/lab/week-10/labs/week-10/source",
     "hasPublish": false,
-    "sourceEntries": 0
+    "sourceEntries": 5
   }
 ]
