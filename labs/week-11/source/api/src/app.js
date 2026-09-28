@@ -1,14 +1,14 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
+import path from 'node:path';
+import { existsSync } from 'node:fs';
+
 import { config } from './config.js';
 import requestRoutes from './routes/requestRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import healthRoutes from './routes/healthRoutes.js';
-import path from 'node:path';
-import { existsSync } from 'node:fs';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
-import { config } from './config.js';
 
 export function createApp() {
   const app = express();
@@ -22,7 +22,7 @@ export function createApp() {
   // ③ อ่าน JSON body
   app.use(express.json());
 
-  /// route ของ API ทั้งหมดอยู่ใต้ /api — รวมถึงข้อความต้อนรับ
+  // ④ Route ของ API ทั้งหมดอยู่ใต้ /api — รวมถึงข้อความต้อนรับ
   app.get('/api', (req, res) => {
     res.json({ message: 'Campus Service API is running', version: '3.0.0' });
   });
@@ -30,6 +30,7 @@ export function createApp() {
   app.use('/api/requests', requestRoutes);
   app.use('/api/users', userRoutes);
 
+  // ⑤ Serve Frontend ใน Production & Catch-all route
   if (config.isProd && existsSync(config.staticDir)) {
     app.use(express.static(config.staticDir));
     // ทุก path ที่ไม่ขึ้นต้นด้วย /api → คืน index.html (React Router จัดการต่อ)
@@ -40,7 +41,8 @@ export function createApp() {
     // dev: หน้าเว็บอยู่ที่ Vite (5173) · / ของ API ตอบข้อความบอกทางแทน
     app.get('/', (req, res) => res.json({ message: 'API (dev) — หน้าเว็บอยู่ที่พอร์ต 5173' }));
   }
-  // ⑥ ปิดท้าย
+
+  // ⑥ ปิดท้ายด้วย Error Handlers
   app.use(notFound);
   app.use(errorHandler);
 
