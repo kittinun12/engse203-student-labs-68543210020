@@ -1,3 +1,5 @@
+process.env.NODE_ENV = 'production'; 
+
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
@@ -12,6 +14,9 @@ import { errorHandler, notFound } from './middleware/errorHandler.js';
 
 export function createApp() {
   const app = express();
+
+  // 👈 บังคับธง isProd ใน config ให้เป็น true เพื่อป้องกันปัญหา ES Module Import อ่านค่าไปก่อน
+  config.isProd = true;
 
   // ① CORS ต้องมาก่อนทุกอย่าง — ไม่งั้นเบราว์เซอร์จะถูกบล็อกก่อนถึง route
   app.use(cors({ origin: config.corsOrigin }));
