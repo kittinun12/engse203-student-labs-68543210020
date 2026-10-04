@@ -4,7 +4,7 @@
  */
 
 // ถ้าไม่มี VITE_API_BASE_URL ให้ fallback เป็น '' (relative path) เพื่อใช้กับ Production
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
 
 /** error ที่รู้ว่ามาจาก API พร้อม status ที่ได้กลับมา */
 export class ApiError extends Error {
