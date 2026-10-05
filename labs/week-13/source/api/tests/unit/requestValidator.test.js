@@ -75,3 +75,23 @@ describe('isValidStatus', () => {
     expect(isValidStatus(s)).toBe(false);
   });
 });
+
+describe('validateRequestInput — ชนิดข้อมูลและความยาวสูงสุด (Week 13)', () => {
+  test.each([123, ['สมชาย'], { first: 'สม' }, true])('ชื่อเป็น %j → "ต้องเป็นข้อความ"', (requesterName) => {
+    expect(validateRequestInput(withField({ requesterName }))).toContain('ชื่อผู้แจ้งต้องเป็นข้อความ');
+  });
+
+  test('ชื่อ 100 ตัวอักษร → ผ่าน · 101 → error', () => {
+    expect(validateRequestInput(withField({ requesterName: 'n'.repeat(100) }))).toEqual([]);
+    expect(validateRequestInput(withField({ requesterName: 'n'.repeat(101) }))).toHaveLength(1);
+  });
+
+  test('รายละเอียด 1000 ตัวอักษร → ผ่าน · 1001 → error', () => {
+    expect(validateRequestInput(withField({ details: 'n'.repeat(1000) }))).toEqual([]);
+    expect(validateRequestInput(withField({ details: 'n'.repeat(1001) }))).toHaveLength(1);
+  });
+
+  test('สถานที่ 101 ตัวอักษร → error', () => {
+    expect(validateRequestInput(withField({ location: 'n'.repeat(101) }))).toHaveLength(1);
+  });
+});
