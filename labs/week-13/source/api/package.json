@@ -9,7 +9,7 @@
     "dev": "node --disable-warning=ExperimentalWarning --watch --env-file=.env src/server.js",
     "start": "node --disable-warning=ExperimentalWarning src/server.js",
     "check": "node scripts/check-project.mjs",
-    "test": "npx vitest run",
+    "test": "vitest run",
     "db:setup": "node --disable-warning=ExperimentalWarning scripts/setup-db.mjs",
     "db:reset": "node --disable-warning=ExperimentalWarning scripts/setup-db.mjs --force",
     "test:watch": "npx vitest",
