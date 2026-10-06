@@ -13,7 +13,8 @@
     "import:publish": "node scripts/import-publish.mjs",
     "build:pages": "node scripts/build-pages.mjs",
     "verify": "node scripts/verify-repository.mjs",
-    "verify:lab": "node scripts/verify-repository.mjs --week"
+    "verify:lab": "node scripts/verify-repository.mjs --week",
+    "test": "npm test --prefix labs/week-13/source/api && npm test --prefix labs/week-13/source/frontend"
   },
   "devDependencies": {
     "supertest": "^7.3.0"
