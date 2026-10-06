@@ -10,10 +10,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    # 🟢 กำหนด working directory ชี้ไปที่ labs/week-12/source ตามที่โจทย์กำหนด
     defaults:
       run:
-        working-directory: labs/week-12/source
+        working-directory: labs/week-13/source
 
     steps:
       - name: Checkout repository
