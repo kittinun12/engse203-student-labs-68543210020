@@ -1,3 +1,4 @@
+import authRoutes from './routes/authRoutes.js';
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
@@ -24,6 +25,8 @@ export function createApp() {
   // 🏫 TODO W13-VALID (CP48): จำกัดขนาด body ไม่เกิน 10kb → express.json({ limit: '10kb' })
   app.use(express.json({ limit: '10kb' })); // Week 13 – body ใหญ่เกินนี้ได้ 413
 
+  app.use('/api/auth', authRoutes);
+  
   // ④ route ของ API — ทุกอย่างอยู่ใต้ /api
   app.get('/api', (req, res) => {
     res.json({ message: 'Campus Service API is running', version: '3.0.0' });
