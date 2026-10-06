@@ -10,10 +10,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    # 🟢 กำหนด working directory ชี้ไปที่ labs/week-12/source ตามที่โจทย์กำหนด
     defaults:
       run:
-        working-directory: labs/week-12/source
+        working-directory: labs/week-13/source
 
     steps:
       - name: Checkout repository
@@ -22,10 +21,13 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install
+          npm install --prefix api
+          npm install --prefix frontend
 
       - name: Run tests
         run: npm test
