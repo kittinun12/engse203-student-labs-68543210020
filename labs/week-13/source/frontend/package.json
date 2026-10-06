@@ -9,7 +9,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "verify": "npm run check && npm run build",
-    "test": "vitest run"
+    "test": "npx vitest run"
   },
   "dependencies": {
     "react": "19.2.7",
